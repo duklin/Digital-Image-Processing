@@ -9,9 +9,10 @@ def threshold_change(th):
 
 
 lenna = cv2.imread('Lenna.png', cv2.IMREAD_GRAYSCALE)
+lenna = np.float32(lenna)
 threshold = 70
 
-filters = np.empty((4, 3, 3), dtype=np.int8)
+filters = np.empty((4, 3, 3), dtype='float32')
 filters[0] = [[1, 1, 0],
               [1, 0, -1],
               [0, -1, -1]]
@@ -27,6 +28,10 @@ filters[3] = [[-1, 0, 1],
 filters = np.append(filters, np.negative(filters), axis=0)
 
 filtered = [cv2.filter2D(lenna, -1, fil) for fil in filters]
+filtered = np.abs(filtered)
+for i in range(len(filtered)):
+    filtered[i] = filtered[i] / np.max(filtered[i]) * 255
+
 summed = np.max(filtered, axis=0)
 
 thresholded = [cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)[1]
