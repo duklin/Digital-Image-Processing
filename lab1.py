@@ -46,4 +46,4 @@ def plot(im1, im2, coords):
 
 
 if __name__ == "__main__":
-    contrast_stretching('lena.png', [(60, 20), (150, 230)])
+    contrast_stretching('Lenna.png', [(60, 20), (150, 230)])
