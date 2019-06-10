@@ -12,14 +12,14 @@ def search(query_img_path):
     moments = zernike_moments(query_img)
     results = {}
     for (k, v) in index.items():
-        d = dist.sqeuclidean(v, moments)
+        d = dist.correlation(v, moments)
         results[k] = d
     results = sorted([(v, k) for (k, v) in results.items()])
     return results[:6]
 
 
 if __name__ == '__main__':
-    query_img_path = 'lab3/query/14426.jpg'
+    query_img_path = 'lab3/query/14729.jpg'
     result = search(query_img_path)
     x = 231
     for i in range(6):

@@ -22,7 +22,7 @@ def zernike_moments(img):
     cv2.drawContours(outline, [cnts], -1, 255, -1)
 
     return mahotas.features.zernike_moments(outline, radius=max(img.shape)/2,
-                                            degree=20)
+                                            degree=15)
 
 
 if __name__ == '__main__':
