@@ -1,13 +1,17 @@
 import cv2
 import mahotas
-from lab3_a import segment
 import numpy as np
 import pickle
 import csv
 import glob
+import os
 
 
 def zernike_moments(img):
+    if os.getcwd().endswith('lab3'):
+        from lab3_a import segment
+    else:
+        from lab3.lab3_a import segment
     thresh = segment(img)
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -17,21 +21,23 @@ def zernike_moments(img):
     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
     cv2.drawContours(outline, [cnts], -1, 255, -1)
 
-    return mahotas.features.zernike_moments(outline, radius=30)
+    return mahotas.features.zernike_moments(outline, radius=max(img.shape)/2,
+                                            degree=20)
 
 
-source_paths = ['database/', 'query/']
-index = {}
+if __name__ == '__main__':
+    source_paths = ['database/', 'query/']
+    index = {}
 
-for path in source_paths:
-    for image_path in glob.glob(path + '**jpg', recursive=True):
-        img = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        res = zernike_moments(img)
-        index[image_path] = res
+    for path in source_paths:
+        for image_path in glob.glob(path + '**jpg', recursive=True):
+            img = cv2.imread(image_path, cv2.IMREAD_COLOR)
+            res = zernike_moments(img)
+            index[image_path] = res
 
-w = csv.writer(open('zernike_moments.csv', 'w'))
-for key, val in index.items():
-    w.writerow([key, val])
+    w = csv.writer(open('zernike_moments.csv', 'w'))
+    for key, val in index.items():
+        w.writerow([key, val])
 
-with open('index.pickle', 'wb') as file:
-    pickle.dump(index, file)
+    with open('index.pickle', 'wb') as file:
+        pickle.dump(index, file)

@@ -25,14 +25,15 @@ def save_img(src_path, original, result):
     cv2.imwrite(dest, final)
 
 
-source_paths = ['database/', 'query/']
-destination_path = 'segmented/'
+if __name__ == '__main__':
+    source_paths = ['database/', 'query/']
+    destination_path = 'segmented/'
 
-if not os.path.exists(destination_path):
-    os.mkdir(destination_path)
+    if not os.path.exists(destination_path):
+        os.mkdir(destination_path)
 
-for path in source_paths:
-    for image_path in glob.glob(path + '**jpg', recursive=True):
-        img = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        res = segment(img)
-        save_img(image_path, img, res)
+    for path in source_paths:
+        for image_path in glob.glob(path + '**jpg', recursive=True):
+            img = cv2.imread(image_path, cv2.IMREAD_COLOR)
+            res = segment(img)
+            save_img(image_path, img, res)
